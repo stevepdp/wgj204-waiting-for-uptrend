@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_Scenes/00_Start.unity
+    guid: 25ac71ae37038114ab655128212367fb
+  - enabled: 1
+    path: Assets/_Scenes/10_Game.unity
+    guid: df473866421131940905eea3830445f8
+  - enabled: 1
+    path: Assets/_Scenes/95_Zero.unity
+    guid: e0e2d6bb76fac4a47a0490d9fb954da0
+  - enabled: 1
+    path: Assets/_Scenes/96_Loss.unity
+    guid: d8df317e4d8e17e4eba24057c68c1599
+  - enabled: 1
+    path: Assets/_Scenes/97_Profit.unity
+    guid: 25c8866c2771b1540bf4c6d545c6d31c
+  - enabled: 1
+    path: Assets/_Scenes/98_Doubled.unity
+    guid: caf2072ef848fae44bc14e68ec65cc93
+  - enabled: 1
+    path: Assets/_Scenes/99_Moon.unity
+    guid: f73ac395c83e19b4cbc1e09ba281cb1c
+  m_configObjects: {}
