@@ -146,10 +146,7 @@ public class GameManager : MonoBehaviour
             GameOver();
 
         if (coinValue == 0 && gameIsActive)
-        {
-            coinValue = 0; // lock at zero
             GameOver();
-        }
     }
 
     // TODO: The buttons call this. To be replaced with events.
