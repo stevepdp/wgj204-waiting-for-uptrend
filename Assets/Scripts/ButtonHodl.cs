@@ -5,21 +5,8 @@ using UnityEngine.EventSystems;
 
 public class ButtonHodl : MonoBehaviour, IPointerClickHandler
 {
-    private GameManager _gameManager;
-
-    void Start()
-    {
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-    }
-
-    void Update()
-    {
-
-    }
-
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("Clicked: " + eventData.pointerCurrentRaycast.gameObject.name);
     }
-
 }

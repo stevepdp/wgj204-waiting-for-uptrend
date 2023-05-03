@@ -1,20 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UIPostController : MonoBehaviour
 {
-    private GameManager _gameManager;
-
     [SerializeField]
     private Text _postText;
-
-    void Awake()
-    {
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-    }
 
     private void Update()
     {
@@ -23,8 +13,7 @@ public class UIPostController : MonoBehaviour
 
     public void DisplayPostText()
     {
-        string post = _gameManager.GetPostText();
-        _postText.text = post;
+        _postText.text = GameManager.Instance.PopupText;
     }
 
     public void HidePostUI()

@@ -1,96 +1,92 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
 public class GameManager : MonoBehaviour
 {
-    // Game Values
-    [SerializeField]
-    const float _coinInWallet = 1;
-    [SerializeField]
-    private float _coinValue;
-    [SerializeField]
-    private float _coinValueStart;
-    [SerializeField]
-    private float _timeValue;
-    [SerializeField]
-    private string _postText;
+    static GameManager instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (instance == null)
+                instance = GameObject.FindObjectOfType<GameManager>();
+            if (instance == null)
+                instance = Instantiate(new GameObject("GameManager")).AddComponent<GameManager>();
+            return instance;
+        }
+    }
 
-    // Game States
-    private bool _hodler = true;
-    private int _hodlMinim = 60;
-    private bool _gameInProgress = true;
+    const float GMJM_START_VALUE = 1000f;
+    const float GMJM_PRICE_DROP_DELAY = 1f;
+    const float GMJM_PRICE_DROP_REPEATS = 1f;
+    const byte HODL_MIN_TIME = 60;
 
-    // IEnumerators
-    private IEnumerator _marketEffectIEnumerator;
-    private bool _stopMarketEffectEnum;
+    bool gameIsActive = true;
+    bool isHolding = true;
+    float coinValue = GMJM_START_VALUE;
+    float timeRemaining = 120;
+    string popupText;
+
+    public float CoinValue
+    {
+        get { return coinValue; }
+    }
+
+    public string PopupText
+    {
+        get { return popupText; }
+    }
 
     void Awake()
     {
-        //GameObject[] objs = GameObject.FindGameObjectsWithTag("GameManager");
-
-        /*if (objs.Length > 1)
-        {
-            //Destroy(this.gameObject);
-            Destroy(objs[0]); // destroy the old one
-        }*/
-
-        DontDestroyOnLoad(this.gameObject);
+        EnforceSingleInstance();
     }
 
     void Start()
     {
-        // Enforce game defaults
-        _coinValueStart = 1000f; // 1 $GMJM coin is equal to $1000 fiat
-        _coinValue = _coinValueStart;
-        _stopMarketEffectEnum = false;
-        _timeValue = 120; // 2 minutes game time remaining
-
-        _marketEffectIEnumerator = MarketEffectIEnumerator();
-        StartCoroutine(_marketEffectIEnumerator);
+        NewGame();
     }
 
     void Update()
     {
-        if (_timeValue > 0 && _gameInProgress)
-        {
-            _timeValue -= Time.deltaTime;
-        }
+        if (timeRemaining > 0 && gameIsActive)
+            timeRemaining -= Time.deltaTime;
     }
 
-    private void LateUpdate()
+    void LateUpdate()
     {
-        if (_timeValue <= 0 && _gameInProgress)
-        {
+        if (timeRemaining <= 0 && gameIsActive)
             OnGameOver();
-        }
 
-        if (_coinValue <= 0 && _gameInProgress)
+        if (coinValue <= 0 && gameIsActive)
         {
-            _coinValue = 0; // lock at zero
+            coinValue = 0; // lock at zero
             OnGameOver();
         }
     }
 
-    IEnumerator MarketEffectIEnumerator()
+    void EnforceSingleInstance()
     {
-        while (_stopMarketEffectEnum == false)
-        {
-            cpuReduceCoinValue();
+        if (instance == null)
+            instance = this;
+        else if (instance != this)
+            Destroy(gameObject);
 
-            // wait x seconds before running again
-            yield return new WaitForSeconds(1f);
-        }
+        DontDestroyOnLoad(gameObject);
     }
 
-    void cpuReduceCoinValue()
+    void NewGame()
+    {
+        InvokeRepeating("ReduceCoinValue", GMJM_PRICE_DROP_DELAY, GMJM_PRICE_DROP_REPEATS);
+    }
+
+    void ReduceCoinValue()
     {
         int roll = Random.Range(1, 4);
         float impact = 0;
 
-        switch (roll) {
+        switch (roll)
+        {
             case 1:
                 impact = 4;
                 break;
@@ -104,89 +100,75 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        if ((_hodlMinim >= _timeValue) && _hodler)
+        if ((HODL_MIN_TIME >= timeRemaining) && isHolding)
         {
-            _coinValue += impact;
+            coinValue += impact;
             //Debug.Log("B: It's past 60 seconds and the player is hodling.");
         }
-        else if (_timeValue > _hodlMinim && !_hodler)
+        else if (timeRemaining > HODL_MIN_TIME && !isHolding)
         {
-            _coinValue -= impact;
+            coinValue -= impact;
             //Debug.Log("C: CPU basic impact roll: -" + impact.ToString());
         }
         else
         {
-            _coinValue -= impact;
+            coinValue -= impact;
             //Debug.Log("A: CPU basic impact roll: -" + impact.ToString());
         }
 
         // to the moon condition
-        if ((_hodlMinim >= _timeValue) && _hodler && _timeValue < 3)
+        if ((HODL_MIN_TIME >= timeRemaining) && isHolding && timeRemaining < 3)
         {
             Debug.Log("To the moon!");
-            _coinValue += Random.Range(250000,5000000);
+            coinValue += Random.Range(250000, 5000000);
         }
 
-        if (_coinValue <= 0)
+        if (coinValue <= 0)
         {
-            _coinValue = 0; // lock at zero
+            coinValue = 0; // lock at zero
             OnGameOver();
         }
     }
     public float GetCoinValue()
     {
-        return this._coinValue;
-    }
-
-    public string GetPostText()
-    {
-        return this._postText;
+        return this.coinValue;
     }
 
     public float GetTimeElapsed()
-    {  
-        return this._timeValue;
+    {
+        return this.timeRemaining;
     }
 
     public void OnGameOver()
     {
-        _gameInProgress = false;
+        CancelInvoke("ReduceCoinValue");
+        gameIsActive = false;
 
-        //Debug.Log("GameOver condition met:");
-        
-        if(_coinValue < _coinValueStart) // loss
+        if (coinValue < GMJM_START_VALUE) // loss
         {
-            if (_coinValue <= 0) // zero
+            if (coinValue <= 0) // zero
             {
-                //Debug.Log("Going to 95_Zero");
                 SceneManager.LoadScene("95_Zero");
             }
             else
             {
-                //Debug.Log("Going to 96_Loss");
                 SceneManager.LoadScene("96_Loss");
             }
         }
-       
 
-        if (_coinValue >= _coinValueStart * 100) // to the moon!
+
+        if (coinValue >= GMJM_START_VALUE * 100) // to the moon!
         {
-            //Debug.Log("Going to 99_Moon");
             SceneManager.LoadScene("99_Moon");
         }
-        else if (_coinValue >= _coinValueStart * 2) // doubled
+        else if (coinValue >= GMJM_START_VALUE * 2) // doubled
         {
-            //Debug.Log("Going to 98_Doubled");
             SceneManager.LoadScene("98_Doubled");
         }
-        else if (_coinValue > _coinValueStart) // profit
+        else if (coinValue > GMJM_START_VALUE) // profit
         {
-            //Debug.Log("Going to 97_Profit");
             SceneManager.LoadScene("97_Profit");
         }
-
-        _stopMarketEffectEnum = true;
-        StopCoroutine(_marketEffectIEnumerator);
     }
 
     public void SetPostText(string type)
@@ -212,7 +194,7 @@ public class GameManager : MonoBehaviour
         switch (type)
         {
             case "hodl":
-                _postText = "keep calm and hodl";
+                popupText = "keep calm and hodl";
                 break;
 
             case "meme":
@@ -241,11 +223,11 @@ public class GameManager : MonoBehaviour
                     "just checked my crypto balance and it told me to f**k off #cryptocrash #altcoin",
                     "it has been a privilege losing #GMJM with you today #cryptocrash #sinkingship"
                 };
-                _postText = "you sent a tasty meme:\n\n\"";
-                _postText += memes[Random.Range(0, memes.Length)];
-                _postText += "\"\n\nthe market reacted positively";
-                _coinValue += playerImpact;
-                _hodler = false;
+                popupText = "you sent a tasty meme:\n\n\"";
+                popupText += memes[Random.Range(0, memes.Length)];
+                popupText += "\"\n\nthe market reacted positively";
+                coinValue += playerImpact;
+                isHolding = false;
                 break;
 
             case "vibe":
@@ -273,11 +255,11 @@ public class GameManager : MonoBehaviour
                     "you only lose when you sell #gmjm #altcoin",
                     "legends just hodl #hodling #gmjm"
                 };
-                _postText = "you sent a positive vibe:\n\n\"";
-                _postText += vibes[Random.Range(0, vibes.Length)];
-                _postText += "\"\n\nit shaped the actions of many";
-                _coinValue += playerImpact;
-                _hodler = false;
+                popupText = "you sent a positive vibe:\n\n\"";
+                popupText += vibes[Random.Range(0, vibes.Length)];
+                popupText += "\"\n\nit shaped the actions of many";
+                coinValue += playerImpact;
+                isHolding = false;
                 break;
         }
     }

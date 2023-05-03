@@ -1,27 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EmotionEngine : MonoBehaviour
 {
-    private GameManager _gameManager;
-
     public SpriteRenderer spriteRenderer;
     public Sprite[] spriteArray;
 
-    void Awake()
-    {
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-    }
-
-    private void Start()
-    {
-
-    }
-
     void Update()
     {
-        float coinVal = _gameManager.GetCoinValue();
+        float coinVal = GameManager.Instance.GetCoinValue();
 
         if (coinVal < 100)
         {
