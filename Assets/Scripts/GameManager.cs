@@ -16,7 +16,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    const byte HODL_MIN_TIME = 60;
+    const byte HODL_PERKS_THRESHOLD = 60;
+    const byte MOON_PERKS_THRESHOLD = 3;
     const byte MARKET_IMPACT_LOW = 4;
     const byte MARKET_IMPACT_MED = 10;
     const byte MARKET_IMPACT_HIGH = 20;
@@ -24,11 +25,11 @@ public class GameManager : MonoBehaviour
     const byte PLAYER_IMPACT_MED = 5;
     const byte PLAYER_IMPACT_HIGH = 10;
     const byte GAME_TIME_SECONDS = 60;
-    const float GMJM_START_VALUE = 1000f;
     const float PRICE_DROP_START_DELAY = 1f;
     const float PRICE_DROP_REPEAT_RATE = 1f;
     const float TIMEOVER_START_DELAY = 0f;
     const float TIMEOVER_REPEAT_RATE = 1f;
+    const int GMJM_START_VALUE = 1000;
     const int MOON_RANGE_MIN = 250000;
     const int MOON_RANGE_MAX = 5000000;
 
@@ -37,10 +38,10 @@ public class GameManager : MonoBehaviour
     byte timeRemaining;
     byte[] marketImpactValues = new byte[] { MARKET_IMPACT_LOW, MARKET_IMPACT_MED, MARKET_IMPACT_HIGH };
     byte[] playerImpactValues = new byte[] { PLAYER_IMPACT_LOW, PLAYER_IMPACT_MED, PLAYER_IMPACT_HIGH };
-    float coinValue;
+    int coinValue;
     string popupText;
 
-    public float CoinValue
+    public int CoinValue
     {
         get { return coinValue; }
     }
@@ -120,16 +121,15 @@ public class GameManager : MonoBehaviour
         int randomIndex = Random.Range(0, marketImpactValues.Length);
         byte chosenImpact = marketImpactValues[randomIndex];
 
-        if ((HODL_MIN_TIME >= timeRemaining) && isHolding)
+        if ((HODL_PERKS_THRESHOLD >= timeRemaining) && isHolding)
             coinValue += chosenImpact;
-        else if (timeRemaining > HODL_MIN_TIME && !isHolding)
+        else if (timeRemaining > HODL_PERKS_THRESHOLD && !isHolding)
             coinValue -= chosenImpact;
         else
             coinValue -= chosenImpact;
 
-        // to the moon condition
-        if ((HODL_MIN_TIME >= timeRemaining) && isHolding && timeRemaining < 3)
-            coinValue += Random.Range(MOON_RANGE_MIN, MOON_RANGE_MAX);
+        if ((HODL_PERKS_THRESHOLD >= timeRemaining) && isHolding && timeRemaining < MOON_PERKS_THRESHOLD)
+            coinValue += Random.Range(MOON_RANGE_MIN, MOON_RANGE_MAX); // to the moon!
 
         if (coinValue <= 0)
         {
