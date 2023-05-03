@@ -7,7 +7,7 @@ public class EmotionEngine : MonoBehaviour
 
     void Update()
     {
-        float coinVal = GameManager.Instance.GetCoinValue();
+        float coinVal = GameManager.Instance.CoinValue;
 
         if (coinVal < 100)
         {

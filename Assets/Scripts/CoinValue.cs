@@ -13,7 +13,7 @@ public class CoinValue : MonoBehaviour
 
     void DisplayCoinValue()
     {
-        float coinValue = GameManager.Instance.GetCoinValue();
+        float coinValue = GameManager.Instance.CoinValue;
         _coinValueText.text = "$" + coinValue.ToString();
     }
 }

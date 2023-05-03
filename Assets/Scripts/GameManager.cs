@@ -16,15 +16,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    const float GMJM_START_VALUE = 1000f;
-    const float GMJM_PRICE_DROP_DELAY = 1f;
-    const float GMJM_PRICE_DROP_REPEATS = 1f;
     const byte HODL_MIN_TIME = 60;
+    const byte MARKET_IMPACT_LOW = 4;
+    const byte MARKET_IMPACT_MED = 10;
+    const byte MARKET_IMPACT_HIGH = 20;
+    const byte PLAYER_IMPACT_LOW = 2;
+    const byte PLAYER_IMPACT_MED = 5;
+    const byte PLAYER_IMPACT_HIGH = 10;
+    const byte GAME_TIME_SECONDS = 60;
+    const float GMJM_START_VALUE = 1000f;
+    const float PRICE_DROP_START_DELAY = 1f;
+    const float PRICE_DROP_REPEAT_RATE = 1f;
+    const float TIMEOVER_START_DELAY = 0f;
+    const float TIMEOVER_REPEAT_RATE = 1f;
+    const int MOON_RANGE_MIN = 250000;
+    const int MOON_RANGE_MAX = 5000000;
 
-    bool gameIsActive = true;
-    bool isHolding = true;
-    float coinValue = GMJM_START_VALUE;
-    float timeRemaining = 120;
+    bool gameIsActive;
+    bool isHolding;
+    byte timeRemaining;
+    byte[] marketImpactValues = new byte[] { MARKET_IMPACT_LOW, MARKET_IMPACT_MED, MARKET_IMPACT_HIGH };
+    byte[] playerImpactValues = new byte[] { PLAYER_IMPACT_LOW, PLAYER_IMPACT_MED, PLAYER_IMPACT_HIGH };
+    float coinValue;
     string popupText;
 
     public float CoinValue
@@ -37,6 +50,11 @@ public class GameManager : MonoBehaviour
         get { return popupText; }
     }
 
+    public byte TimeRemaining
+    {
+        get { return timeRemaining; }
+    }
+
     void Awake()
     {
         EnforceSingleInstance();
@@ -45,24 +63,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         NewGame();
-    }
-
-    void Update()
-    {
-        if (timeRemaining > 0 && gameIsActive)
-            timeRemaining -= Time.deltaTime;
-    }
-
-    void LateUpdate()
-    {
-        if (timeRemaining <= 0 && gameIsActive)
-            OnGameOver();
-
-        if (coinValue <= 0 && gameIsActive)
-        {
-            coinValue = 0; // lock at zero
-            OnGameOver();
-        }
     }
 
     void EnforceSingleInstance()
@@ -75,121 +75,91 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    void NewGame()
-    {
-        InvokeRepeating("ReduceCoinValue", GMJM_PRICE_DROP_DELAY, GMJM_PRICE_DROP_REPEATS);
-    }
-
-    void ReduceCoinValue()
-    {
-        int roll = Random.Range(1, 4);
-        float impact = 0;
-
-        switch (roll)
-        {
-            case 1:
-                impact = 4;
-                break;
-            case 2:
-                impact = 10;
-                break;
-            case 3:
-                impact = 20;
-                break;
-            default:
-                break;
-        }
-
-        if ((HODL_MIN_TIME >= timeRemaining) && isHolding)
-        {
-            coinValue += impact;
-            //Debug.Log("B: It's past 60 seconds and the player is hodling.");
-        }
-        else if (timeRemaining > HODL_MIN_TIME && !isHolding)
-        {
-            coinValue -= impact;
-            //Debug.Log("C: CPU basic impact roll: -" + impact.ToString());
-        }
-        else
-        {
-            coinValue -= impact;
-            //Debug.Log("A: CPU basic impact roll: -" + impact.ToString());
-        }
-
-        // to the moon condition
-        if ((HODL_MIN_TIME >= timeRemaining) && isHolding && timeRemaining < 3)
-        {
-            Debug.Log("To the moon!");
-            coinValue += Random.Range(250000, 5000000);
-        }
-
-        if (coinValue <= 0)
-        {
-            coinValue = 0; // lock at zero
-            OnGameOver();
-        }
-    }
-    public float GetCoinValue()
-    {
-        return this.coinValue;
-    }
-
-    public float GetTimeElapsed()
-    {
-        return this.timeRemaining;
-    }
-
-    public void OnGameOver()
+    // TODO: Sell button calls this too. To be replaced with events perhaps?
+    public void GameOver()
     {
         CancelInvoke("ReduceCoinValue");
+        CancelInvoke("ReduceTimeRemaining");
         gameIsActive = false;
 
+        // TODO: Send to a single dynamic scene choosing from an array of graphics perhaps?
         if (coinValue < GMJM_START_VALUE) // loss
         {
             if (coinValue <= 0) // zero
-            {
                 SceneManager.LoadScene("95_Zero");
-            }
             else
-            {
                 SceneManager.LoadScene("96_Loss");
-            }
         }
-
-
-        if (coinValue >= GMJM_START_VALUE * 100) // to the moon!
-        {
+        else if (coinValue >= GMJM_START_VALUE * 100) // to the moon!
+        { 
             SceneManager.LoadScene("99_Moon");
         }
         else if (coinValue >= GMJM_START_VALUE * 2) // doubled
         {
             SceneManager.LoadScene("98_Doubled");
-        }
+        }  
         else if (coinValue > GMJM_START_VALUE) // profit
         {
             SceneManager.LoadScene("97_Profit");
         }
     }
 
+    void NewGame()
+    {
+        gameIsActive = true;
+        coinValue = GMJM_START_VALUE;
+        isHolding = true;
+        timeRemaining = GAME_TIME_SECONDS;
+
+        InvokeRepeating("ReduceCoinValue", PRICE_DROP_START_DELAY, PRICE_DROP_REPEAT_RATE);
+        InvokeRepeating("ReduceTimeRemaining", TIMEOVER_START_DELAY, TIMEOVER_REPEAT_RATE);
+    }
+
+    void ReduceCoinValue()
+    {
+        int randomIndex = Random.Range(0, marketImpactValues.Length);
+        byte chosenImpact = marketImpactValues[randomIndex];
+
+        if ((HODL_MIN_TIME >= timeRemaining) && isHolding)
+            coinValue += chosenImpact;
+        else if (timeRemaining > HODL_MIN_TIME && !isHolding)
+            coinValue -= chosenImpact;
+        else
+            coinValue -= chosenImpact;
+
+        // to the moon condition
+        if ((HODL_MIN_TIME >= timeRemaining) && isHolding && timeRemaining < 3)
+            coinValue += Random.Range(MOON_RANGE_MIN, MOON_RANGE_MAX);
+
+        if (coinValue <= 0)
+        {
+            coinValue = 0; // lock at zero
+            GameOver();
+        }
+    }
+
+    void ReduceTimeRemaining()
+    {
+        timeRemaining -= 1;
+
+        if (timeRemaining == 0 && gameIsActive)
+            GameOver();
+
+        if (coinValue == 0 && gameIsActive)
+        {
+            coinValue = 0; // lock at zero
+            GameOver();
+        }
+    }
+
+    // TODO: The buttons call this. To be replaced with events.
     public void SetPostText(string type)
     {
-        int roll = Random.Range(1, 4);
-        float playerImpact = 0;
+        int randomIndex = Random.Range(0, playerImpactValues.Length);
+        byte chosenPlayerImpact = playerImpactValues[randomIndex];
 
-        switch (roll)
-        {
-            case 1:
-                playerImpact = 2;
-                break;
-            case 2:
-                playerImpact = 5;
-                break;
-            case 3:
-                playerImpact = 10;
-                break;
-            default:
-                break;
-        }
+        isHolding = false;
+        coinValue += chosenPlayerImpact;
 
         switch (type)
         {
@@ -226,8 +196,6 @@ public class GameManager : MonoBehaviour
                 popupText = "you sent a tasty meme:\n\n\"";
                 popupText += memes[Random.Range(0, memes.Length)];
                 popupText += "\"\n\nthe market reacted positively";
-                coinValue += playerImpact;
-                isHolding = false;
                 break;
 
             case "vibe":
@@ -258,8 +226,6 @@ public class GameManager : MonoBehaviour
                 popupText = "you sent a positive vibe:\n\n\"";
                 popupText += vibes[Random.Range(0, vibes.Length)];
                 popupText += "\"\n\nit shaped the actions of many";
-                coinValue += playerImpact;
-                isHolding = false;
                 break;
         }
     }

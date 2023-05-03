@@ -8,12 +8,12 @@ public class Clock : MonoBehaviour
 
     void Update()
     {
-        DisplayTime();
+        DisplayTime(); // TODO: make this event driven - to tick every second opposed to every frame
     }
 
     void DisplayTime()
     {
-        float timeToDisplay = GameManager.Instance.GetTimeElapsed();
+        float timeToDisplay = GameManager.Instance.TimeRemaining;
 
         if (timeToDisplay < 0) timeToDisplay = 0; // lock at 0
 

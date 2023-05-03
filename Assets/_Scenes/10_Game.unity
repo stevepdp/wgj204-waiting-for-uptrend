@@ -443,56 +443,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &540737244
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 540737246}
-  - component: {fileID: 540737245}
-  m_Layer: 0
-  m_Name: ScreenShotter
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &540737245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 540737244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eced4ef663cc86943b754c2a8a9199ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fileDestination: Screenshots/
-  filePrefix: screenshot_
-  fileDateFormat: yyyy-MM-dd_HH-mm-ss
-  fileExt: .png
-  scaleFactor: 1
-  captureInterval: 3
---- !u!4 &540737246
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 540737244}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 12
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &662182636
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1199,10 +1149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2598ec60168e90a4ea7dc15a50cdd8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _coinValue: 1000
-  _coinValueStart: 0
-  _timeValue: 120
-  _postText: 
 --- !u!4 &2111543150
 Transform:
   m_ObjectHideFlags: 0
@@ -1500,7 +1446,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2320970028434845737, guid: e6a24668e85ff6840b84c6e5e4241468, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnGameOver
+      value: GameOver
       objectReference: {fileID: 0}
     - target: {fileID: 2320970028434845737, guid: e6a24668e85ff6840b84c6e5e4241468, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
