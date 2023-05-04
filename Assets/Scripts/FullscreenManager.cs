@@ -1,32 +1,69 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FullscreenManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+#if PLATFORM_STANDALONE
+    static FullscreenManager instance;
+    public static FullscreenManager Instance
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if ((Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.F))
-            || (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F))
-            || (Input.GetKey(KeyCode.LeftCommand) && Input.GetKeyDown(KeyCode.F))
-            || (Input.GetKeyDown(KeyCode.Escape)))
+        get
         {
-            if (Screen.fullScreen)
+            if (instance == null)
             {
-                Screen.SetResolution(1280, 720, false);
+                instance = GameObject.FindObjectOfType<FullscreenManager>();
             }
-            else
+            if (instance == null)
             {
-                //Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, true);
-                Screen.SetResolution(1280, 720, true);
+                instance = Instantiate(new GameObject("FullscreenManager")).AddComponent<FullscreenManager>();
             }
+            return instance;
         }
     }
+
+    const int DEFAULT_WIDTH = 1280;
+    const int DEFAULT_HEIGHT = 720;
+
+    void Awake()
+    {
+        EnforceSingleInstance();
+    }
+
+    void Update()
+    {
+        ToggleFullScreen();
+    }
+
+    void DisableFullScreen() => Screen.SetResolution(DEFAULT_WIDTH, DEFAULT_HEIGHT, false);
+
+    void EnableFullScreen() => Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, true);
+
+    void EnforceSingleInstance()
+    {
+        if (instance == null)
+            instance = this;
+        else if (instance != this)
+            Destroy(gameObject);
+
+        DontDestroyOnLoad(gameObject);
+    }
+
+    void ToggleFullScreen()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            DisableFullScreen();
+
+        if ((Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Return)) ||
+            (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.F)) ||
+            (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Return)) ||
+            (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F)) ||
+            (Input.GetKey(KeyCode.LeftCommand) && Input.GetKeyDown(KeyCode.Return)) ||
+            (Input.GetKey(KeyCode.LeftCommand) && Input.GetKeyDown(KeyCode.F)))
+        {
+            if (Screen.fullScreen)
+                DisableFullScreen();
+            else
+                EnableFullScreen();
+        }
+    }
+#endif
 }
