@@ -1,3 +1,5 @@
+using Random = UnityEngine.Random;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,6 +18,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public static event Action OnCoinValueImpacted;
+
     const byte HODL_PERKS_THRESHOLD = 60;
     const byte MOON_PERKS_THRESHOLD = 3;
     const byte MARKET_IMPACT_LOW = 4;
@@ -24,7 +28,7 @@ public class GameManager : MonoBehaviour
     const byte PLAYER_IMPACT_LOW = 2;
     const byte PLAYER_IMPACT_MED = 5;
     const byte PLAYER_IMPACT_HIGH = 10;
-    const byte GAME_TIME_SECONDS = 60;
+    const byte GAME_TIME_SECONDS = 120;
     const float PRICE_DROP_START_DELAY = 1f;
     const float PRICE_DROP_REPEAT_RATE = 1f;
     const float TIMEOVER_START_DELAY = 0f;
@@ -118,7 +122,7 @@ public class GameManager : MonoBehaviour
 
     void ReduceCoinValue()
     {
-        int randomIndex = Random.Range(0, marketImpactValues.Length);
+        int randomIndex = UnityEngine.Random.Range(0, marketImpactValues.Length);
         byte chosenImpact = marketImpactValues[randomIndex];
 
         if ((HODL_PERKS_THRESHOLD >= timeRemaining) && isHolding)
@@ -130,6 +134,8 @@ public class GameManager : MonoBehaviour
 
         if ((HODL_PERKS_THRESHOLD >= timeRemaining) && isHolding && timeRemaining < MOON_PERKS_THRESHOLD)
             coinValue += Random.Range(MOON_RANGE_MIN, MOON_RANGE_MAX); // to the moon!
+
+        OnCoinValueImpacted?.Invoke();
 
         if (coinValue <= 0)
         {
