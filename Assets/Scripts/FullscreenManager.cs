@@ -1,21 +1,17 @@
+#if PLATFORM_STANDALONE
 using UnityEngine;
 
 public class FullscreenManager : MonoBehaviour
 {
-#if PLATFORM_STANDALONE
     static FullscreenManager instance;
     public static FullscreenManager Instance
     {
         get
         {
             if (instance == null)
-            {
                 instance = GameObject.FindObjectOfType<FullscreenManager>();
-            }
             if (instance == null)
-            {
                 instance = Instantiate(new GameObject("FullscreenManager")).AddComponent<FullscreenManager>();
-            }
             return instance;
         }
     }
@@ -65,5 +61,5 @@ public class FullscreenManager : MonoBehaviour
                 EnableFullScreen();
         }
     }
-#endif
 }
+#endif
