@@ -3,12 +3,21 @@ using UnityEngine.UI;
 
 public class Clock : MonoBehaviour
 {
-    [SerializeField]
-    private Text _clockText;
+    Text clockText;
 
-    void Update()
+    void Awake()
     {
-        DisplayTime(); // TODO: make this event driven - to tick every second opposed to every frame
+        clockText = GetComponent<Text>();
+    }
+
+    void OnEnable()
+    {
+        GameManager.OnClockTick += DisplayTime;
+    }
+
+    void OnDisable()
+    {
+        GameManager.OnClockTick -= DisplayTime;
     }
 
     void DisplayTime()
@@ -20,6 +29,7 @@ public class Clock : MonoBehaviour
         float minutes = Mathf.FloorToInt(timeToDisplay / 60);
         float seconds = Mathf.FloorToInt(timeToDisplay % 60);
 
-        _clockText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        if (clockText != null)
+            clockText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 }

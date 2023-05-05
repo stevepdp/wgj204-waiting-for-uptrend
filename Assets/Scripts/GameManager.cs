@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     }
 
     public static event Action OnCoinValueImpacted;
+    public static event Action OnClockTick;
 
     const byte HODL_PERKS_THRESHOLD = 60;
     const byte MOON_PERKS_THRESHOLD = 3;
@@ -150,6 +151,7 @@ public class GameManager : MonoBehaviour
     void ReduceTimeRemaining()
     {
         timeRemaining -= 1;
+        OnClockTick?.Invoke();
 
         if (timeRemaining == 0 && gameIsActive)
             GameOver();
