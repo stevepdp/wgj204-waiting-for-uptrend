@@ -1413,7 +1413,7 @@ GameObject:
   - component: {fileID: 1902967785}
   - component: {fileID: 1902967784}
   m_Layer: 0
-  m_Name: TitleGraphic
+  m_Name: TitleGraph
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
