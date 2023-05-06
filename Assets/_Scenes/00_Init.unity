@@ -138,7 +138,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!114 &353021211
 MonoBehaviour:
@@ -177,6 +177,10 @@ PrefabInstance:
     - target: {fileID: 3475530062175302112, guid: e6a45e87ad398e44f8f9651047a96fd1, type: 3}
       propertyPath: m_Name
       value: FullScreenManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3475530062175302112, guid: e6a45e87ad398e44f8f9651047a96fd1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 3475530062175302113, guid: e6a45e87ad398e44f8f9651047a96fd1, type: 3}
       propertyPath: m_RootOrder

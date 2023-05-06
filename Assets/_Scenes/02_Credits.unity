@@ -137,7 +137,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &31105853
 RectTransform:
@@ -175,7 +175,7 @@ GameObject:
   m_TagString: MainCamera
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!20 &232489909
 Camera:
@@ -456,7 +456,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 500, y: -15}
+  m_AnchoredPosition: {x: 500, y: -31}
   m_SizeDelta: {x: 950, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &384693311
@@ -492,16 +492,17 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Fonts\r\n1) \"Kenney Mini\" by \"Kenney\" is licensed CC0 1.0 Universal:\r\nhttps://www.kenney.nl/assets/kenney-fonts\r\n\r\n2)
-    \"Kenney Mini Square\" by \"Kenney\" is licensed CC0 1.0 Universal:\r\nhttps://www.kenney.nl/assets/kenney-fonts\r\n\n\r\r\nPhotos\r\n1)
-    \"The blue boat.\" \"by Bernard Spragg. NZ\" is licensed CC0 1.0 Universal:\r\nhttps://search.creativecommons.org/photos/b6232744-66ba-4516-8827-062600c45de7\r\n\r\n2)
+  m_Text: "-- Fonts --\n1) \"Kenney Mini\" by \"Kenney\" is licensed CC0 1.0 Universal:\r\nhttps://www.kenney.nl/assets/kenney-fonts\r\n\r\n2)
+    \"Kenney Mini Square\" by \"Kenney\" is licensed CC0 1.0 Universal:\r\nhttps://www.kenney.nl/assets/kenney-fonts\r\n\n\r\r\n--
+    Photos --\n1) \"The blue boat.\" \"by Bernard Spragg. NZ\" is licensed CC0 1.0
+    Universal:\r\nhttps://search.creativecommons.org/photos/b6232744-66ba-4516-8827-062600c45de7\r\n\r\n2)
     \"yackt\" by \"D - 15 photography\" is licensed CC0 1.0 Universal:\r\nhttps://www.flickr.com/photos/94606278@N02/14251002071\r\n\r\n3)
     \"Yacht Sailing in Ocean\" by \"Image Catalog\" is licensed CC0 1.0 Universal:\r\nhttps://www.flickr.com/photos/132795455@N08/18008006325\r\n\r\n4)
     \"First stage of Jason-3 rocket (24382360351)\" by \"SpaceX Photos\" is licensed
     CC0 1.0 Universal:\r\nhttps://commons.wikimedia.org/w/index.php?curid=46472372\r\n\r\n5)
     \"Death Valley National Park\" by \"U.S. Department of the Interior\" is licensed
-    Public Domain Mark 1.0:\r\nhttps://www.flickr.com/photos/usinterior/49942082017/\r\nhttps://creativecommons.org/publicdomain/mark/1.0/\r\n\r\n\r\nShaders\r\n1)
-    Free gradient shader for Unity by Alex Strook:\r\nhttps://twitter.com/AlexStrook/status/1294735487513645058\r\n"
+    Public Domain Mark 1.0:\r\nhttps://www.flickr.com/photos/usinterior/49942082017/\r\nhttps://creativecommons.org/publicdomain/mark/1.0/\r\n\r\n\r\n--
+    Shaders\r --\n1) Free gradient shader for Unity by Alex Strook:\r\nhttps://twitter.com/AlexStrook/status/1294735487513645058\r\n"
 --- !u!222 &384693312
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -653,7 +654,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &1003344675
 RectTransform:
@@ -917,7 +918,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &1228885736
 RectTransform:
@@ -1397,7 +1398,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!114 &1900689301
 MonoBehaviour:
