@@ -2,7 +2,7 @@
 
 [![Play Waiting For Uptrend on Itch.io](./waiting-for-uptrend-1.09.gif)](https://stevepdp.itch.io/waiting-for-uptrend)
 
-Originally made in one week for Weekly Game Jam 204 with theme "Downhill".
+Originally made in one week for [Weekly Game Jam 204](https://web.archive.org/web/20230123053111/https://itch.io/jam/weekly-game-jam-204) with theme "Downhill".
 
 It has since received post-jam fixes and feature improvements.
 
