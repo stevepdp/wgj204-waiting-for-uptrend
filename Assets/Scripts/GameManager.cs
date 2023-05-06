@@ -147,6 +147,7 @@ public class GameManager : MonoBehaviour
         if (coinValue <= 0)
         {
             coinValue = 0; // lock at zero
+            OnCoinValueImpacted?.Invoke();
             GameOver();
         }
     }
