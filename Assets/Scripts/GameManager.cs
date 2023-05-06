@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
 
     void MarketReduceCoinValue()
     {
-        int randomIndex = UnityEngine.Random.Range(0, marketImpactValues.Length);
+        int randomIndex = Random.Range(0, marketImpactValues.Length);
         byte chosenImpact = marketImpactValues[randomIndex];
 
         if ((HODL_PERKS_THRESHOLD >= timeRemaining) && isHolding)
@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviour
         else
             coinValue -= chosenImpact;
 
-        if ((HODL_PERKS_THRESHOLD >= timeRemaining) && isHolding && timeRemaining < MOON_PERKS_THRESHOLD)
+        if ((HODL_PERKS_THRESHOLD >= timeRemaining) && isHolding && timeRemaining <= MOON_PERKS_THRESHOLD)
             coinValue += Random.Range(MOON_RANGE_MIN, MOON_RANGE_MAX); // to the moon!
 
         OnCoinValueImpacted?.Invoke();

@@ -17,8 +17,6 @@ It has since received post-jam fixes and feature improvements.
                 <br>
                 Aseprite, GIMP
                 <br>
-                Audacity, Bfxr
-                <br>
                 Permissively licensed assets
             </td>
         </tr>
