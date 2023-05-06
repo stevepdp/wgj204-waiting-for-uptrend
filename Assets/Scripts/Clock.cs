@@ -22,14 +22,16 @@ public class Clock : MonoBehaviour
 
     void DisplayTime()
     {
-        float timeToDisplay = GameManager.Instance.TimeRemaining;
+        if (clockText != null && GameManager.Instance != null)
+        {
+            float timeToDisplay = GameManager.Instance.TimeRemaining;
 
-        if (timeToDisplay < 0) timeToDisplay = 0; // lock at 0
+            if (timeToDisplay < 0) timeToDisplay = 0; // lock at 0
 
-        float minutes = Mathf.FloorToInt(timeToDisplay / 60);
-        float seconds = Mathf.FloorToInt(timeToDisplay % 60);
+            float minutes = Mathf.FloorToInt(timeToDisplay / 60);
+            float seconds = Mathf.FloorToInt(timeToDisplay % 60);
 
-        if (clockText != null)
             clockText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
     }
 }

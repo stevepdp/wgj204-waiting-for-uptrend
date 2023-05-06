@@ -3,17 +3,26 @@ using UnityEngine.UI;
 
 public class CoinValue : MonoBehaviour
 {
-    [SerializeField]
-    private Text _coinValueText;
+    Text coinValueText;
 
-    void Update()
+    void Awake()
     {
-        DisplayCoinValue();
+        coinValueText = GetComponent<Text>();
+    }
+
+    void OnEnable()
+    {
+        GameManager.OnCoinValueImpacted += DisplayCoinValue;
+    }
+
+    void OnDisable()
+    {
+        GameManager.OnCoinValueImpacted -= DisplayCoinValue;
     }
 
     void DisplayCoinValue()
     {
-        float coinValue = GameManager.Instance.CoinValue;
-        _coinValueText.text = "$" + coinValue.ToString();
+        if (coinValueText != null && GameManager.Instance != null)
+            coinValueText.text = "$" + GameManager.Instance.CoinValue.ToString();
     }
 }
