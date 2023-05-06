@@ -4,15 +4,15 @@ public class ExitToOSButton : MonoBehaviour
 {
     void Awake()
     {
-        DisableButton();
+        #if UNITY_EDITOR || UNITY_WEBGL
+            DisableButton();
+        #endif
     }
 
     public void ExitToOS() => Application.Quit();
 
     void DisableButton()
     {
-        #if UNITY_EDITOR || UNITY_WEBGL
-                gameObject.SetActive(false);
-        #endif
+        gameObject.SetActive(false);
     }
 }
