@@ -39,8 +39,13 @@ public class GameManager : MonoBehaviour
     bool isHolding;
     byte timeRemaining;
     byte[] marketImpactValues = new byte[] { MARKET_IMPACT_LOW, MARKET_IMPACT_MED, MARKET_IMPACT_HIGH };
+    GameEndType gameEnding;
     int coinValue;
     string popupText;
+
+    public GameEndType GameEnding {
+        get { return gameEnding; }
+    }
 
     public int CoinValue
     {
@@ -84,33 +89,33 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // TODO: Sell button calls this too. To be replaced with events perhaps?
     public void GameOver()
     {
         CancelInvoke("ReduceCoinValue");
         CancelInvoke("ReduceTimeRemaining");
         gameIsActive = false;
 
-        // TODO: Send to a single dynamic scene choosing from an array of graphics perhaps?
-        if (coinValue < GMJM_START_VALUE) // loss
+        if (coinValue < GMJM_START_VALUE)
         {
-            if (coinValue <= 0) // zero
-                SceneManager.LoadScene("95_Zero");
-            else
-                SceneManager.LoadScene("96_Loss");
+            if (coinValue == 0)
+                gameEnding = GameEndType.ZERO;
+            else if (coinValue > 0 && coinValue < GMJM_START_VALUE)
+                gameEnding = GameEndType.LOSS;
         }
-        else if (coinValue >= GMJM_START_VALUE * 100) // to the moon!
+        else if (coinValue > GMJM_START_VALUE && coinValue < GMJM_START_VALUE * 2)
+        {
+            gameEnding = GameEndType.PROFIT;
+        }
+        else if (coinValue >= GMJM_START_VALUE * 2 && coinValue < MOON_RANGE_MIN)
         { 
-            SceneManager.LoadScene("99_Moon");
+            gameEnding = GameEndType.SIGNIFICANT_PROFIT;
         }
-        else if (coinValue >= GMJM_START_VALUE * 2) // doubled
+        else if (coinValue >= MOON_RANGE_MIN)
         {
-            SceneManager.LoadScene("98_Doubled");
-        }  
-        else if (coinValue > GMJM_START_VALUE) // profit
-        {
-            SceneManager.LoadScene("97_Profit");
+            gameEnding = GameEndType.TO_THE_MOON;
         }
+
+        SceneManager.LoadScene("99_GameOver");
     }
 
     void NewGame()
@@ -131,8 +136,6 @@ public class GameManager : MonoBehaviour
 
         if ((HODL_PERKS_THRESHOLD >= timeRemaining) && isHolding)
             coinValue += chosenImpact;
-        else if (timeRemaining > HODL_PERKS_THRESHOLD && !isHolding)
-            coinValue -= chosenImpact;
         else
             coinValue -= chosenImpact;
 
