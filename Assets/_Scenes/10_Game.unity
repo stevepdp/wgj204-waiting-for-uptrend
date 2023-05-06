@@ -891,50 +891,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f59a12fc19e5e7468e3f6b814a307b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &707945877
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 707945879}
-  - component: {fileID: 707945878}
-  m_Layer: 0
-  m_Name: SceneManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &707945878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 707945877}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f777e55f510ec3e41a09550a98f4bfff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &707945879
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 707945877}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 281.5, y: 281.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &865909548
 GameObject:
   m_ObjectHideFlags: 0
@@ -1132,7 +1088,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06772b2e3f06b6d4e9d86ebea0846c8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _clockText: {fileID: 866238444}
 --- !u!114 &866238444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1425,7 +1380,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3436362675467926941, guid: 244e08646d129e641a062e690553eb90, type: 3}
       propertyPath: m_Name
-      value: Walls
+      value: UIWalls
       objectReference: {fileID: 0}
     - target: {fileID: 3436362675467926941, guid: 244e08646d129e641a062e690553eb90, type: 3}
       propertyPath: m_IsActive
@@ -1795,7 +1750,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42d9dbed35d1eb746bea384d0b6bc94b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _coinValueText: {fileID: 1476232916}
 --- !u!114 &1476232916
 MonoBehaviour:
   m_ObjectHideFlags: 0
