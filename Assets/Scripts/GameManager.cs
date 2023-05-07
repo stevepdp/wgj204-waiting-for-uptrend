@@ -131,36 +131,42 @@ public class GameManager : MonoBehaviour
 
     void MarketReduceCoinValue()
     {
-        int randomIndex = Random.Range(0, marketImpactValues.Length);
-        byte chosenImpact = marketImpactValues[randomIndex];
-
-        if ((HODL_PERKS_THRESHOLD >= timeRemaining) && isHolding)
-            coinValue += chosenImpact;
-        else
-            coinValue -= chosenImpact;
-
-        if ((HODL_PERKS_THRESHOLD >= timeRemaining) && isHolding && timeRemaining <= MOON_PERKS_THRESHOLD)
-            coinValue += Random.Range(MOON_RANGE_MIN, MOON_RANGE_MAX); // to the moon!
-
-        OnCoinValueImpacted?.Invoke();
-
-        if (coinValue <= 0)
+        if (gameIsActive)
         {
-            coinValue = 0; // lock at zero
+            int randomIndex = Random.Range(0, marketImpactValues.Length);
+            byte chosenImpact = marketImpactValues[randomIndex];
+
+            if ((HODL_PERKS_THRESHOLD >= timeRemaining) && isHolding)
+                coinValue += chosenImpact;
+            else
+                coinValue -= chosenImpact;
+
+            if ((HODL_PERKS_THRESHOLD >= timeRemaining) && isHolding && timeRemaining <= MOON_PERKS_THRESHOLD)
+                coinValue += Random.Range(MOON_RANGE_MIN, MOON_RANGE_MAX); // to the moon!
+
             OnCoinValueImpacted?.Invoke();
-            GameOver();
+
+            if (coinValue <= 0)
+            {
+                coinValue = 0; // lock at zero
+                OnCoinValueImpacted?.Invoke();
+                GameOver();
+            }
         }
     }
 
     void ReduceTimeRemaining()
     {
-        timeRemaining -= 1;
-        OnClockTick?.Invoke();
+        if (gameIsActive)
+        {
+            timeRemaining -= 1;
+            OnClockTick?.Invoke();
 
-        if (timeRemaining == 0 && gameIsActive)
-            GameOver();
+            if (timeRemaining == 0 && gameIsActive)
+                GameOver();
 
-        if (coinValue == 0 && gameIsActive)
-            GameOver();
+            if (coinValue == 0 && gameIsActive)
+                GameOver();
+        }
     }
 }
