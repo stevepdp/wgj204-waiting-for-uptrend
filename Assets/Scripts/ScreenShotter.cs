@@ -1,8 +1,22 @@
-using UnityEngine;
+#if UNITY_EDITOR
 using System.IO;
+using UnityEngine;
 
 public class ScreenShotter : MonoBehaviour
 {
+    static ScreenShotter instance;
+    public static ScreenShotter Instance
+    {
+        get
+        {
+            if (instance == null)
+                instance = GameObject.FindObjectOfType<ScreenShotter>();
+            if (instance == null)
+                instance = Instantiate(new GameObject("ScreenShotter")).AddComponent<ScreenShotter>();
+            return instance;
+        }
+    }
+
     [Header("Filename Settings")]
 
     [SerializeField, Tooltip("Set the destination path. This folder will be placed at the top of your project directory.")]
@@ -25,33 +39,50 @@ public class ScreenShotter : MonoBehaviour
     [SerializeField, Tooltip("The number of seconds between each capture.")]
     float captureInterval = 3f;
     float timeSinceCapture;
+    [SerializeField] bool isEnabled;
 
-    void Start()
+    void Awake()
     {
-        CreateScreenshotsDir();
+        EnforceSingleInstance();
     }
 
     void Update()
     {
+        CreateScreenshotsDir();
         TakeScreenshot();
     }
 
     void CreateScreenshotsDir()
     {
-        if (!Directory.Exists(fileDestination))
+        if (!Directory.Exists(fileDestination) && isEnabled)
             Directory.CreateDirectory(fileDestination);
     }
+    void EnforceSingleInstance()
+    {
+        if (instance == null)
+            instance = this;
+        else if (instance != this)
+            Destroy(gameObject);
+
+        DontDestroyOnLoad(gameObject);
+    }
+
 
     void TakeScreenshot()
     {
-        timeSinceCapture += Time.deltaTime;
-
-        if (timeSinceCapture >= captureInterval)
+        if (isEnabled)
         {
-            timeSinceCapture -= captureInterval;
-            string fileName = filePrefix + System.DateTime.Now.ToString(fileDateFormat) + fileExt;
-            string filePath = Path.Combine(fileDestination, fileName);
-            ScreenCapture.CaptureScreenshot(filePath, scaleFactor);
+            timeSinceCapture += Time.deltaTime;
+
+            if (timeSinceCapture >= captureInterval)
+            {
+                timeSinceCapture -= captureInterval;
+                string fileName = filePrefix + System.DateTime.Now.ToString(fileDateFormat) + fileExt;
+                string filePath = Path.Combine(fileDestination, fileName);
+                ScreenCapture.CaptureScreenshot(filePath, scaleFactor);
+            }
         }
+        
     }
 }
+#endif
